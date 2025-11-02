@@ -67,7 +67,13 @@ public class SandboxFileAccessPersist: SandboxFileAccessProtocol {
     }
     
     class func keyForBookmarkData(for url: URL) -> String {
-        let urlStr = url.absoluteString
+        let urlStr: String
+        if #available(macOS 13, *) {
+            // 'path(percentEncoded:)' is only available in macOS 13.0 or newer
+            urlStr = url.path()
+        } else {
+            urlStr = url.path
+        }
         return String(format: "bd_%1$@", urlStr)
     }
     
